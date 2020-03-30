@@ -7,7 +7,7 @@ int main()
 {
 	int N, M;
 	int vertex = 0;
-	int count = 1;
+	int count = 0;
 	queue<int> queueshort;
 
 	cin >> N >> M;
@@ -216,21 +216,23 @@ int main()
 	{
 		int search = queueshort.front();
 
+		if (search == (N - 1) * (M - 1))
+		{
+			break;
+		}
 		// 큐의 FRONT가 방문 전이라면 출력 후 POP / 방문했다면 그냥 POP
 		if (visited[search] != 1)
 		{
 			count++;
 			cout << search << " ";
-			queueshort.pop();
+	
 		}
 		else
 		{
-			count--;
-			queueshort.pop();
-		}
+		//	count -= 1;
 
-	
-		
+		}
+		queueshort.pop();
 
 		// 방문 여부 노드 1로 
 		visited[search] = 1;
