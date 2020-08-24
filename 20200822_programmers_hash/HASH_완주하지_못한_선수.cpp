@@ -7,21 +7,16 @@ using namespace std;
 string solution(vector<string> participant, vector<string> completion) {
     string answer = "";
     vector<string>::iterator it;
+    sort(participant.begin(), participant.end());
+    sort(completion.begin(), completion.end());
     for (int i = 0; i < completion.size(); i++)
     {
-        it = find(participant.begin(), participant.end(), completion[i]);
-        if (it != participant.end())
-        {
-            *it = "";
-        }
-    }
-    for (int i = 0; i < participant.size(); i++)
-    {
-        if (participant[i] != "")
+        if (participant[i] != completion[i])
         {
             answer = participant[i];
             break;
         }
+        answer = participant[completion.size()];
     }
     return answer;
 }
