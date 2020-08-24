@@ -11,7 +11,7 @@ bool solution(vector<string> phone_book) {
     {
         for (int j = i + 1; j < phone_book.size(); j++)
         {
-            if (phone_book[j].find(phone_book[i]) <= phone_book.size())
+            if (phone_book[j].find(phone_book[i]) == 0)
             {
                 answer = false;
                 break;
@@ -24,7 +24,7 @@ bool solution(vector<string> phone_book) {
 
 int main()
 {
-    vector<string> list = { "119", "97674223", "1195524421" };
+    vector<string> list = { "119", "97674223", "5521194421" };
     cout << solution(list) << endl;
 
     list = { "123" ,"456", "789" };
