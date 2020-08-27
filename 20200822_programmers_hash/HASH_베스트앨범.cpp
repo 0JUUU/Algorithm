@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <unordered_map>
+#include <map>
 #include <algorithm>
 using namespace std;
 
@@ -9,52 +10,60 @@ bool compare(pair<string, int> a, pair<string, int> b) {
     return a.second > b.second;
 }
 
+bool compare2(pair<int, string> a, pair<int, string> b) {
+    return a.second > b.second;
+}
 
 vector<int> solution(vector<string> genres, vector<int> plays) {
     vector<int> answer;
-    vector<pair<string, int>> albums;
-    unordered_map<string, vector<int>> play;
-    unordered_map<string, int> total_plays;
+    unordered_map<string, int> total;
+    multimap<int, string, greater<int>> info;
 
     for (int i = 0; i < genres.size(); i++)
     {
-        if (total_plays[genres[i]] <= 0) total_plays[genres[i]] = plays[i];
-        else total_plays[genres[i]] += plays[i];
+        if (total[genres[i]] == 0) total[genres[i]] = plays[i];
+        else total[genres[i]] += plays[i];
 
-        play[genres[i]].push_back(plays[i]);
-        albums.push_back(pair<string, int>(genres[i], plays[i]));
-        cout << genres[i] << "  " << plays[i] << endl;
+        info.insert(pair<int, string>(plays[i], genres[i]));
     }
-    for (auto i : play)
-    {
-        sort(i.second.begin(), i.second.end(), greater<int>());
-    }
+    vector<pair<string, int>> total_sort;
+    for (auto it = total.begin(); it != total.end(); it++) total_sort.push_back(*it);
 
-    for (auto i : play)
-    {
-        cout << i.second.begin() << " ";
-    }
-    cout << endl;
+    sort(total_sort.begin(), total_sort.end(), compare);
 
-    vector<pair<string, int>> tmp;
-    for (auto it = total_plays.begin(); it != total_plays.end(); it++) tmp.push_back(*it);
+ /*   for (auto i : total_sort) cout << i.first << "  " << i.second << endl;
 
-    sort(tmp.begin(), tmp.end(), compare);
+    for (auto i : info) cout << i.first << "  " << i.second << endl;*/
 
-    for (auto i : tmp)
-    {
-        cout << i.first << "  " << i.second << endl;
-    }
+    vector<pair<int, string>> info_sort;
+    for (auto it = info.begin(); it != info.end(); it++) info_sort.push_back(*it);
+
+    sort(info_sort.begin(), info_sort.end(), compare2);
+ //   for (auto i : info_sort) cout << i.first << "  " << i.second << endl;
 
     int count = 0;
-    for (int i = 0; i < tmp.size(); i++)
+    for (int i = 0; i < total_sort.size(); i++)
     {
         count = 0;
-        for (int j = 0; j < albums[tmp[i].first].size(); i++)
+
+        for (int j = 0; j < info_sort.size() || count == 2; j++)
         {
-            answer.push_back(albums[tmp[i].first][j]);
-            count++;
             if (count == 2) break;
+            if (total_sort[i].first == info_sort[j].second)
+            {
+                vector<int>:: iterator it;
+                if (find(plays.begin(), plays.end(), info_sort[j].first) != plays.end())
+                {
+                    it = find(plays.begin(), plays.end(), info_sort[j].first);
+                    *it = 0;
+ //                   for (auto b : plays) cout << b << endl;
+                }
+                    
+                int index = distance(plays.begin(), it);
+                answer.push_back(index);
+                count++;
+            }
+            
         }
 
     }
@@ -64,9 +73,23 @@ vector<int> solution(vector<string> genres, vector<int> plays) {
 
 int main()
 {
-    vector<string> genres = {"classic", "pop", "classic", "classic", "pop"};
-    vector<int> plays = {500, 600, 150, 800, 2500};
+    /*
+    vector<string> genres = { "a", "a", "b", "b", "c", "c", "d", "d" };
+    vector<int> plays = { 1, 1, 1, 1, 1, 1, 1, 1 };
+    */
 
+    /*
+    vector<string> genres = { "a", "a", "b", "c", "a", "a" };
+    vector<int> plays = { 1, 2, 2, 2, 2, 2 };
+    */
+
+    //vector<string> genres = { "a", "a", "d", "d", "c", "b" };
+    //vector<int> plays = { 5, 5, 3, 3, 5, 6 };
+
+    // บาล๋
+    vector<string> genres = { "a", "a", "d", "d", "c", "b" };
+    vector<int> plays = { 5, 5, 3, 3, 500, 6 };
+  
     vector<int> answer = solution(genres, plays);
     for (auto i : answer) cout << i << endl;
 }
