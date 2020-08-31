@@ -1,14 +1,23 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <cstring>
+#include <sstream>  //stringstream
 #include <algorithm>
 using namespace std;
 
 string solution(string s) {
     string answer = "";
+    string token = "";
     vector<int> arr;
-    for (int i = 0; i < s.size(); i++)
+    
+    // 문자열을 토큰으로 잘라서 int형으로 변환한 뒤 arr 벡터에 삽입
+    for (stringstream sts(s); (sts >> token);)
+    {
+        arr.push_back(stoi(token));
+    }
+
+    /*  
+     for (int i = 0; i < s.size(); i++)
     {
         string str = "";
         if (s[i] == ' ') continue;
@@ -23,6 +32,7 @@ string solution(string s) {
         int a = atoi(str.c_str());
         arr.push_back(a);
     }
+    */
 
     sort(arr.begin(), arr.end());
 
