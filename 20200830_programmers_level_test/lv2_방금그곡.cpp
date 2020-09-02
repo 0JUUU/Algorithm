@@ -6,10 +6,19 @@
 #include <map>
 using namespace std;
 
-string solution(string m, vector<string> musicinfos) {
-    string answer = "";
+bool compare_play(pair<string, string> a, pair<string, string> b) {
+    if (a.second.size() == b.second.size())
+    {
 
-    map<string, string> music;
+        return a.first.size() > b.first.size();
+    }
+    return a.second.size() > b.second.size();
+}
+
+string solution(string m, vector<string> musicinfos) {
+    string answer = "'(None)";
+
+    vector<pair<string, string>> music;
     int hour = 0, minute = 0, time = 0;
     for (int i = 0; i < musicinfos.size(); i++)
     {
@@ -21,9 +30,7 @@ string solution(string m, vector<string> musicinfos) {
             {
                 sts >> hour;
                 sts >> minute;
-                cout << hour << "   " << minute << endl;
                 time = -hour * 60 - minute;
-                cout << time << endl;
             }
 
         }
@@ -35,9 +42,7 @@ string solution(string m, vector<string> musicinfos) {
             {
                 sts >> hour;
                 sts >> minute;
-                cout << hour << "   " << minute << endl;
                 time += (hour * 60 + minute);
-                cout << time << endl;
             }
         }
         else if (i % 4 == 3)
@@ -51,14 +56,11 @@ string solution(string m, vector<string> musicinfos) {
                     {
                         play += musicinfos[i][j];
                         time += 1;
-                        cout << play << endl;
                     }
                     else
                     {
                         play += musicinfos[i][j];
-                        cout << play << endl;
                     }
-                    
                 }
                 else
                 {
@@ -66,25 +68,25 @@ string solution(string m, vector<string> musicinfos) {
                     {
                         play += musicinfos[i][j % musicinfos[i].size()];
                         time += 1;
-                        cout << play << endl;
                     }
                     else
                     {
                         play += musicinfos[i][j % musicinfos[i].size()];
                     }
-                   
                 }
-               
-                
-               
-                
             }
-            cout << play << endl;
             time = 0;
+            if(play.find(m) != string::npos && play[play.find(m) + m.size()] != '#')  music.push_back(make_pair(musicinfos[i - 1], play));
+           
         }
             
     }
+
+    vector<pair<string, string>> sort_play = music;
+    sort(sort_play.begin(), sort_play.end(), compare_play);
    
+    if(!sort_play.empty()) answer = sort_play.front().first;
+    
     return answer;
 }
 
