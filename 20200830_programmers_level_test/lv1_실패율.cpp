@@ -25,7 +25,9 @@ vector<int> solution(int N, vector<int> stages) {
             if (i == stages[j]) fail = j + 1;
             if (i < stages[j]) break;
         }
-        double ratio  = double(fail) / stages_size;
+        double ratio;
+        if (stages_size == 0) ratio = 0;
+        else ratio  = double(fail) / stages_size;
         
         stages.erase(stages.begin(), stages.begin() + fail);
 
